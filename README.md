@@ -1,6 +1,8 @@
-# ds_ml_template
+# Repository for Zoomcamp MLOps Course Cohort 2024
 
-Repository template for data science and machine learning projects.
+**EXTRACTED FROM DS/ML PROJECTS TEMPLATE**  
+**NOT ALL THE FUNCSIONALITY WILL BE WORKING**  
+**RESULTS ARE IN notebooks/final/**
 
 <a name="table-of-content"></a>
 # Table of Content
