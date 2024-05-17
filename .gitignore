@@ -16,7 +16,7 @@
 
 # Notebooks for jupytext
 # /notebooks/final/*.ipynb
-/notebooks/raw/*.ipynb
+# /notebooks/raw/*.ipynb
 /notebooks/template/*.ipynb
 /notebooks/documentation/*.ipynb
 
