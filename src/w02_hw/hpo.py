@@ -9,7 +9,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
 
 mlflow.set_tracking_uri("http://127.0.0.1:5000")
-mlflow.set_experiment("random-forest-hyperopt")
+mlflow.set_experiment("random-forest-hyperopt_02")
 
 
 def load_pickle(filename: str):
@@ -39,16 +39,18 @@ def run_optimization(data_path: str, num_trials: int):
             y_pred = rf.predict(X_val)
             rmse = mean_squared_error(y_val, y_pred, squared=False)
 
-            param_name = "max_depth"
-            mlflow.log_metric(param_name, params[param_name])
-            param_name = "n_estimators"
-            mlflow.log_metric(param_name, params[param_name])
-            param_name = "min_samples_split"
-            mlflow.log_metric(param_name, params[param_name])
-            param_name = "min_samples_leaf"
-            mlflow.log_metric(param_name, params[param_name])
-            param_name = "random_state"
-            mlflow.log_metric(param_name, params[param_name])
+            for param in params.keys():
+                mlflow.log_param(param, params[param])
+            # param_name = "max_depth"
+            # mlflow.log_metric(param_name, params[param_name])
+            # param_name = "n_estimators"
+            # mlflow.log_metric(param_name, params[param_name])
+            # param_name = "min_samples_split"
+            # mlflow.log_metric(param_name, params[param_name])
+            # param_name = "min_samples_leaf"
+            # mlflow.log_metric(param_name, params[param_name])
+            # param_name = "random_state"
+            # mlflow.log_metric(param_name, params[param_name])
             mlflow.log_metric("rmse", rmse)
 
         return {'loss': rmse, 'status': STATUS_OK}
