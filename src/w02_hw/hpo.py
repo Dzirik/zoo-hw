@@ -1,8 +1,8 @@
-import os
-import pickle
 import click
 import mlflow
 import numpy as np
+import os
+import pickle
 from hyperopt import STATUS_OK, Trials, fmin, hp, tpe
 from hyperopt.pyll import scope
 from sklearn.ensemble import RandomForestRegressor
@@ -29,16 +29,27 @@ def load_pickle(filename: str):
     help="The number of parameter evaluations for the optimizer to explore"
 )
 def run_optimization(data_path: str, num_trials: int):
-
     X_train, y_train = load_pickle(os.path.join(data_path, "train.pkl"))
     X_val, y_val = load_pickle(os.path.join(data_path, "val.pkl"))
 
     def objective(params):
+        with mlflow.start_run():
+            rf = RandomForestRegressor(**params)
+            rf.fit(X_train, y_train)
+            y_pred = rf.predict(X_val)
+            rmse = mean_squared_error(y_val, y_pred, squared=False)
 
-        rf = RandomForestRegressor(**params)
-        rf.fit(X_train, y_train)
-        y_pred = rf.predict(X_val)
-        rmse = mean_squared_error(y_val, y_pred, squared=False)
+            param_name = "max_depth"
+            mlflow.log_metric(param_name, params[param_name])
+            param_name = "n_estimators"
+            mlflow.log_metric(param_name, params[param_name])
+            param_name = "min_samples_split"
+            mlflow.log_metric(param_name, params[param_name])
+            param_name = "min_samples_leaf"
+            mlflow.log_metric(param_name, params[param_name])
+            param_name = "random_state"
+            mlflow.log_metric(param_name, params[param_name])
+            mlflow.log_metric("rmse", rmse)
 
         return {'loss': rmse, 'status': STATUS_OK}
 
